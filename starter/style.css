@@ -9,7 +9,7 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
 
     display: flex;
@@ -21,10 +21,9 @@ body {
     flex-basis: 25%;
     display: flex;
     flex-wrap: wrap;
-    position: relative;
 
     color: #ff8d00;
-    font-size: 2em;
+    font-size: 4vw;
     align-items: center;
     justify-content: center;
 }
@@ -46,12 +45,12 @@ button {
     flex-basis: 50%;
     display: flex;
     flex-wrap: wrap;
-    position: relative;
+    justify-content: center;
 }
 
 #game-board > div {
-    width: calc(100% / 3);
-    height: calc(100% / 3);
+    width: calc(100vw / 6);
+    height: calc(100vh / 3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,4 +58,25 @@ button {
     border-radius: 25%;
     color: white;
     font-size: 7.5vw;
+}
+
+@media screen and (orientation: portrait) {
+    #container {
+        flex-direction: column;
+    }
+
+    #container > aside {
+        font-size: 5vh;
+    }
+
+    button {
+        font-size: 5vh;
+    }
+
+    #game-board > div {
+        width: calc(100vw / 3);
+        height: calc(100vh / 6);
+
+        font-size: 7.5vh;
+    }
 }
