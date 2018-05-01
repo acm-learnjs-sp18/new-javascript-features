@@ -25,10 +25,15 @@ class GameBoard extends VisualElement {
       this.insertVisualElement(tile);
     }
   }
-  
+
   updateTurn() {
-    // Check if the game has ended. If so, return immediately and do nothing.
-    if (this.checkIfEnded()) {
+    // Do we have a winner yet? Drum roll...
+    const winner = this.checkWinner();
+
+    if (winner !== undefined) {
+      // We do! Announce the winner.
+      this.turn = undefined;
+      this.statElement.setText(winner + " won!");
       return;
     }
 
@@ -50,8 +55,7 @@ class GameBoard extends VisualElement {
   }
 
   // BOILERPLATE
-  checkIfEnded() {
-    // Possible ways of winning.
+  checkWinner() {
     const waysOfWinning = [
       // Rows
       [0, 1, 2],
@@ -72,16 +76,10 @@ class GameBoard extends VisualElement {
       if (this.tiles[a].clickedBy !== undefined &&
           this.tiles[a].clickedBy === this.tiles[b].clickedBy &&
           this.tiles[a].clickedBy === this.tiles[c].clickedBy) {
-        // Someone won! Announce the winner.
-        const winner = this.tiles[a].clickedBy;
-        this.turn = undefined;
-        this.statElement.setText(winner + " won!");
-        return true;
+        // Someone won!
+        return this.tiles[a].clickedBy;
       }
     }
-
-    // No one has won yet.
-    return false;
   }
 }
 
@@ -99,8 +97,9 @@ class Tile extends VisualElement {
   whenClicked() {
     // Someone just clicked this tile.
 
-    // Only continue if no one has already clicked this tile, and the game is still on.
-    // We don't want the user to be able to change who owns this tile!
+    // Only continue if no one has already clicked this tile, and the game is
+    // still on. We don't want the user to claim this tile after it has been
+    // claimed already, or after the game has ended!
     if (this.clickedBy === undefined && this.gameBoard.turn !== undefined) {
       // Let's see who picked this.
       const clicker = this.gameBoard.turn;
