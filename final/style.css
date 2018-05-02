@@ -3,6 +3,7 @@ body {
 
     font-family: Arvo, sans-serif;
     font-weight: bold;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #container {
