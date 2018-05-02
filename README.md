@@ -67,7 +67,7 @@ Now we need to create the playing tiles for the game.
 1. Create a `Tile` class to represent each single tile.
 
    Find the line
-   
+
    ```js
    // TODO: Tile class
    ```
@@ -230,7 +230,7 @@ track of whose turn it is first.
 
    The method itself is a bit longer than usual, but once you get it it will
    seem pretty straightforward.
-   
+
    We first check if this tile has already been claimed, and only proceed if it
    hasn't using an `if`-statement (`this.clickedBy` is `undefined`).
 
@@ -278,13 +278,13 @@ missing a crucial component: we should detect who won the game!
 
    ```js
    const winner = this.checkWinner();
-   
+
    if (winner !== undefined) {
      this.turn = undefined;
 
      this.statElement.setText(winner + " won!");
    } else {
-     
+
      // Put existing code in updateTurn here
 
    }
@@ -296,7 +296,7 @@ missing a crucial component: we should detect who won the game!
    ![stage-4-1][]
 
    Let me explain what's going on here.
-   
+
    We first find out if there is a winner. If there is (`winner !==
    undefined`), we set `this.turn` to `undefined` to signify that the game has
    ended – and it is now no one's turn. Then, we set the text inside
@@ -323,11 +323,117 @@ missing a crucial component: we should detect who won the game!
    if (this.clickedBy === undefined && this.gameBoard.turn !== undefined) {
    ```
 
-And now we are officially done ☺
+By now, the game should be working! Try playing it against yourself, and make
+sure the "O won!" (or "X won!") message is shown.
 
 ### Stage 5: Make the Replay Button Work
 
+There is one issue with the game as it currently is: the big orange Replay
+button doesn't quite work yet. Let's make it work.
 
+1. Conceptually, the Replay button represents another kind of `VisualElement`.
+   Let's create another class `ReplayButton` that inherits from `VisualElement`
+   to represent it.
+
+   Find the line
+
+   ```js
+   // TODO: ReplayButton class
+   ```
+
+   Replace the line with
+
+   ```js
+   class ReplayButton extends VisualElement {
+     constructor(replayElement, gameBoard) {
+       super(replayElement);
+
+       this.gameBoard = gameBoard;
+     }
+   }
+   ```
+
+   Looks familiar? That's because this is pretty similar to what we had for
+   `Tile` class as well.
+
+2. Now, we want to find a way to restore the entire game board to its initial
+   state. This involves doing several things, but first we want to reset the
+   `this.turn` in `GameBoard` back to player O.
+
+   In `GameBoard`, find the line
+
+   ```js
+   // TODO: reset()
+   ```
+
+   Replace it with
+
+   ```js
+   reset() {
+     this.turn = "O";
+   }
+   ```
+
+3. We also want to clear the message "<var>someone</var> won!"
+
+   At the end of the `reset` method we just added, insert
+
+   ```js
+   this.statElement.setText("");
+   ```
+
+   Now, the `reset` method should look like
+
+   ![stage-5-1][]
+
+4. Now, we need to clear the text in each of the nine tiles. We first need to
+   teach `Tile` objects how to reset themselves.
+
+   At the end of the `Tile` class, under the existing `whenClicked` method, add
+   a new `reset` method:
+
+   ```js
+   reset() {
+     this.clickedBy = undefined;
+     this.setText("");
+   }
+   ```
+
+   The `Tile` class should now look like
+
+   ![stage-5-2][]
+
+5. We already have the nine `Tile` objects in `this.tiles` in `GameBoard`, so
+   it's a matter of calling `reset` on those tiles. Let's use a `for`-`of` loop
+   to do so.
+
+   At the end of the `reset` method **in `GameBoard`**, add the following
+
+   ```js
+   for (const tile of this.tiles) {
+     tile.reset();
+   }
+   ```
+
+   Now, `GameBoard` should look like
+
+   ![stage-5-3][]
+
+6. Finally, we need to call `this.gameBoard.reset()` when the player clicks the
+   Replay button. Add a `whenClicked` method to `ReplayButton` class:
+
+   ```js
+   whenClicked() {
+     this.gameBoard.reset();
+   }
+   ```
+
+   This will reset the entire game board, which will in turn reset all the
+   tiles, etc.
+
+----
+
+And now, we are officially done!
 
 [final]: https://acm-learnjs-sp18.github.io/new-javascript-features/final/index.html
 [final-pic]: https://user-images.githubusercontent.com/1538624/39500939-dedf3f86-4d6c-11e8-9398-61314dafd2d9.png
@@ -341,3 +447,6 @@ And now we are officially done ☺
 [stage-3-2]: https://user-images.githubusercontent.com/1538624/39503329-314e1d70-4d7a-11e8-9281-1108f99a3358.png
 [stage-3]: https://user-images.githubusercontent.com/1538624/39503365-66a2faa4-4d7a-11e8-8414-ccb7bfcf5428.png
 [stage-4-1]: https://user-images.githubusercontent.com/1538624/39503941-763ef686-4d7d-11e8-9015-0518a6edcf0f.png
+[stage-5-1]: https://user-images.githubusercontent.com/1538624/39543207-70b12464-4dff-11e8-8f0d-8d60314168ca.png
+[stage-5-2]: https://user-images.githubusercontent.com/1538624/39543204-70630ebe-4dff-11e8-8ca9-c1d5b9dbf8e2.png
+[stage-5-3]: https://user-images.githubusercontent.com/1538624/39543206-70980cea-4dff-11e8-8f4f-a50c3b8f971b.png

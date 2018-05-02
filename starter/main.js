@@ -38,18 +38,7 @@ class GameBoard extends VisualElement {
 
 // TODO: Tile class
 
-  // TODO: constructor(tileElement, gameBoard)
-
-  // TODO: whenClicked()
-
-  // TODO: reset
-
-
 // TODO: ReplayButton class
-
-  // TODO: constructor(replayElement, gameBoard)
-
-  // TODO: whenClicked()
 
 
 
