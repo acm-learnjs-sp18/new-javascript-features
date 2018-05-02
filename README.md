@@ -174,7 +174,7 @@ track of whose turn it is first.
    At the end of the constructor function, add the following line:
 
    ```js
-   this.turn = "O";
+   this.turn = "O"; // note that this is the letter O like Octogon not the number 0
    ```
 
    (We are making O always go first.)
