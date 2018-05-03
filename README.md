@@ -2,7 +2,7 @@
 
 ## Essential Links
 
-Slides: *will be up soon*
+Slides: https://docs.google.com/presentation/d/1skm1ILBK15usJl4s-FNeMDhUvaLmPjZ7W0DpNB0xxMg/edit?usp=sharing
 
 ## The Project
 
